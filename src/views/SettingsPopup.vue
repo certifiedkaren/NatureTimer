@@ -1,3 +1,12 @@
+<script setup>
+import { ref } from 'vue'
+import { usePomodoroStore } from '@/stores/pomodoroStore'
+
+const pomodoro = usePomodoroStore()
+
+defineEmits(['close'])
+</script>
+
 <template>
   <div
     class="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]"
@@ -12,7 +21,7 @@
           <input
             type="number"
             class="w-20 px-2 py-1 rounded border-white text-center text-white placeholder-white"
-            value="1"
+            v-model="pomodoro.focusLength"
           />
         </div>
 
@@ -21,7 +30,7 @@
           <input
             type="number"
             class="w-20 px-2 py-1 rounded border-white text-center text-white placeholder-white"
-            value="1"
+            v-model="pomodoro.shortBreakLength"
           />
         </div>
 
@@ -30,7 +39,7 @@
           <input
             type="number"
             class="w-20 px-2 py-1 rounded border-white text-center text-white placeholder-white"
-            value="1"
+            v-model="pomodoro.longBreakLength"
           />
         </div>
       </div>
@@ -46,9 +55,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, watch } from 'vue'
-
-defineEmits(['close'])
-</script>

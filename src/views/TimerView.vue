@@ -1,16 +1,20 @@
 <script setup>
 import { ref } from 'vue'
 import SettingsPopup from './SettingsPopup.vue'
+import { usePomodoroStore } from '@/stores/pomodoroStore'
+import bellSound from '/sounds/bell_sound.mp3'
 
 const settingsActive = ref(false)
 const activeMode = ref('pomodoro')
+const pomodoro = usePomodoroStore()
+const bellAudio = new Audio(bellSound)
 
 function selectMode(mode) {
   activeMode.value = mode
 
-  if (mode === 'pomodoro') timeLeft.value = 25 * 60
-  if (mode === 'short') timeLeft.value = 5 * 60
-  if (mode === 'long') timeLeft.value = 15 * 60
+  if (mode === 'pomodoro') timeLeft.value = pomodoro.focusLength * 60
+  if (mode === 'short') timeLeft.value = pomodoro.shortBreakLength * 60
+  if (mode === 'long') timeLeft.value = pomodoro.longBreakLength * 60
 
   timerText.value = formatTime(timeLeft.value)
   isRunning.value = false
@@ -36,6 +40,7 @@ function startTimer() {
     if (timeLeft.value <= 0) {
       clearInterval(intervalId)
       timerText.value = "Time's up!"
+      bellAudio.play()
       isRunning.value = false
       return
     }
