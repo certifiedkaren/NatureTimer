@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import SelectionView from '../views/SelectionView.vue'
 import TimerView from '../views/TimerView.vue'
+import SettingsPopup from '../views/SettingsPopup.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,11 @@ const router = createRouter({
       name: 'timer',
       // component: () => import('../views/TimerView.vue'),
       component: TimerView,
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingsPopup,
     },
   ],
 })
