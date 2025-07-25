@@ -5,9 +5,12 @@ import { usePomodoroStore } from '@/stores/pomodoroStore'
 import bellSound from '/sounds/bell_sound.mp3'
 
 const settingsActive = ref(false)
+const showMusic = ref(false)
 const activeMode = ref('pomodoro')
 const pomodoro = usePomodoroStore()
 const bellAudio = new Audio(bellSound)
+const videoUrl = ref('')
+const videoUrlInput = ref('')
 
 function selectMode(mode) {
   activeMode.value = mode
@@ -90,8 +93,18 @@ function handleSettingsClose() {
   } else if (activeMode.value === 'long') {
     timeLeft.value = pomodoro.longBreakLength * 60
   }
-
   timerText.value = formatTime(timeLeft.value)
+}
+
+function getVideoUrl() {
+  // const newUrl = videoUrlInput.split('=', 2)[1]
+  // const finalUrl = newUrl.includes('&') ? newUrl.split('&')[0] : newUrl
+  // videoUrl.value = finalUrl
+  const url = videoUrlInput.value
+  const regex = /(?:youtube\.com\/(?:.*v=|.*\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  const match = url.match(regex)
+  videoUrl.value = match ? match[1] : ''
+  videoUrlInput.value = ''
 }
 </script>
 
@@ -100,7 +113,7 @@ function handleSettingsClose() {
     class="relative w-screen h-screen bg-cover bg-center"
     style="background-image: url('/images/dubai-background.jpg')"
   >
-    <div class="absolute inset-0 bg-black/40 z-0"></div>
+    <div class="absolute inset-0 bg-black/20 z-0"></div>
 
     <div
       class="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center flex flex-col items-center space-y-6"
@@ -195,6 +208,74 @@ function handleSettingsClose() {
         </button>
       </div>
       <SettingsPopup :show="settingsActive" @close="handleSettingsClose" />
+    </div>
+
+    <div class="absolute bottom-5 left-10 z-10 text-white flex flex-col items-center">
+      <div v-show="showMusic" class="mb-4 bg-black/70 p-4 rounded-lg">
+        <div class="flex items-center space-x-4 mb-2">
+          <p class="text-md font-bold whitespace-nowrap">Music</p>
+          <input
+            v-model="videoUrlInput"
+            type="text"
+            placeholder="URL from YT"
+            class="w-64 px-2 py-1 rounded-lg bg-black border border-white/10 text-center"
+          />
+          <button class="cursor-pointer text-gray-600 hover:text-white/80">
+            <svg
+              @click="getVideoUrl"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+          </button>
+        </div>
+        <iframe
+          width="315"
+          height="215"
+          :src="'https://www.youtube.com/embed/' + videoUrl"
+          class="rounded-lg"
+        >
+        </iframe>
+      </div>
+
+      <button
+        class="cursor-pointer p-2 bg-black/40 rounded-lg hover:bg-black/70"
+        @click="showMusic = !showMusic"
+      >
+        <svg
+          v-if="!showMusic"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m9 9 10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z"
+          />
+        </svg>
+      </button>
+      <button class="cursor-pointer p-2 bg-black/70 rounded-lg" @click="showMusic = !showMusic">
+        <svg
+          v-if="showMusic"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
     </div>
   </div>
 </template>

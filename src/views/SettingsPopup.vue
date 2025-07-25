@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue'
 import { usePomodoroStore } from '@/stores/pomodoroStore'
 
 const pomodoro = usePomodoroStore()
@@ -10,7 +9,7 @@ const props = defineProps({
 
 defineEmits(['close'])
 </script>
-
+<!-- TODO: Make background selector -->
 <template>
   <Transition name="slide-down">
     <div class="fixed inset-0 flex items-center justify-center z-[9999] px-4" v-if="props.show">
