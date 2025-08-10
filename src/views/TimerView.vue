@@ -43,6 +43,7 @@ function startTimer() {
     if (timeLeft.value <= 0) {
       clearInterval(intervalId)
       timerText.value = "Time's up!"
+      document.title = 'Pomodoro Timer'
       bellAudio.play()
       isRunning.value = false
       return
@@ -50,12 +51,14 @@ function startTimer() {
 
     timeLeft.value--
     timerText.value = formatTime(timeLeft.value)
+    document.title = `${formatTime(timeLeft.value)}`
   }, 1000)
 }
 
 function pauseTimer() {
   clearInterval(intervalId)
   intervalId = null
+  document.title = 'Pomodoro Timer'
 }
 
 function resetTimer() {
@@ -71,6 +74,7 @@ function resetTimer() {
     timeLeft.value = pomodoro.longBreakLength * 60
   }
 
+  document.title = 'Pomodoro Timer'
   timerText.value = formatTime(timeLeft.value)
 }
 
@@ -111,7 +115,7 @@ function getVideoUrl() {
 <template>
   <div
     class="relative w-screen h-screen bg-cover bg-center"
-    style="background-image: url('/images/dubai-background.jpg')"
+    style="background-image: url('/images/lake-aurora.jpg')"
   >
     <div class="absolute inset-0 bg-black/20 z-0"></div>
 

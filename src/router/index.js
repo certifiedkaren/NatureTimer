@@ -8,13 +8,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'selection',
-      component: SelectionView,
-    },
-    {
-      path: '/timer',
       name: 'timer',
-      // component: () => import('../views/TimerView.vue'),
       component: TimerView,
     },
     {
